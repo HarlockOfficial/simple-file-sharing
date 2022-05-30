@@ -3,5 +3,34 @@ project(simple_file_sharing C)
 
 set(CMAKE_C_STANDARD 23)
 
-add_executable(simple_file_sharing_client client/main.c client/network/network_connection.c client/network/network_connection.h utils/network/network_connection.c utils/network/network_connection.h)
-add_executable(simple_file_sharing_server server/main.c server/network/network_connection.c server/network/network_connection.h utils/network/network_connection.c utils/network/network_connection.h)
+add_executable(simple_file_sharing_client "")
+target_sources(simple_file_sharing_client
+        PRIVATE
+            client/main.c
+            client/network/connection/network_connection.c
+            client/network/auth/auth.c
+            utils/network/network_connection.c
+        PUBLIC
+            client/network/connection/network_connection.h
+            client/network/auth/auth.h
+            utils/network/network_connection.h
+            utils/tables/file.h
+            utils/tables/user.h
+            utils/tables/auth_token.h
+            utils/tables/user_file_share_permissions.h
+        )
+
+add_executable(simple_file_sharing_server "")
+target_sources(simple_file_sharing_server
+        PRIVATE
+            server/main.c
+            server/network/connection/network_connection.c
+            utils/network/network_connection.c
+        PUBLIC
+            server/network/connection/network_connection.h
+            utils/network/network_connection.h
+            utils/tables/file.h
+            utils/tables/user.h
+            utils/tables/auth_token.h
+            utils/tables/user_file_share_permissions.h
+        )
