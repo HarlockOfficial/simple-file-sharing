@@ -1,6 +1,6 @@
 #include <arpa/inet.h>
 #include "network_connection.h"
-#include "../../utils/network/network_connection.h"
+#include "../../../utils/network/network_connection.h"
 
 int client_connect(connection_details connection, int *serverFd){
     struct sockaddr_in server;
