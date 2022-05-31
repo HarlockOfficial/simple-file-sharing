@@ -25,12 +25,21 @@ target_sources(simple_file_sharing_server
         PRIVATE
             server/main.c
             server/network/connection/network_connection.c
+            server/network/authentication/authentication.c
+            server/network/manager/network_manager.c
+            server/storage/manager/storage_manager.c
+            server/utils/close_thread.c
             utils/network/network_connection.c
         PUBLIC
             server/network/connection/network_connection.h
+            server/network/authentication/authentication.h
+            server/network/manager/network_manager.h
+            server/storage/manager/storage_manager.h
+            server/utils/close_thread.h
             utils/network/network_connection.h
             utils/tables/file.h
             utils/tables/user.h
             utils/tables/auth_token.h
             utils/tables/user_file_share_permissions.h
+            utils/thread_data.h
         )

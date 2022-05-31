@@ -1,0 +1,4 @@
+#ifndef SIMPLE_FILE_SHARING_CLOSE_THREAD_H
+#define SIMPLE_FILE_SHARING_CLOSE_THREAD_H
+void thread_exit(int thread_index);
+#endif //SIMPLE_FILE_SHARING_CLOSE_THREAD_H
