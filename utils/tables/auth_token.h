@@ -3,6 +3,6 @@
 typedef struct {
     long long token_id;
     long long user_id;
-    char* token;
+    char token[50];
 }auth_token;
 #endif //SIMPLE_FILE_SHARING_AUTH_TOKEN_H
