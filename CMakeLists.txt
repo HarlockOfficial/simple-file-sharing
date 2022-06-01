@@ -28,15 +28,21 @@ target_sources(simple_file_sharing_server
             server/network/authentication/authentication.c
             server/network/manager/network_manager.c
             server/storage/manager/storage_manager.c
+            server/storage/database_wrapper/auth_token/auth_token_database.c
+            server/storage/database_wrapper/user/user_database.c
             server/utils/close_thread.c
             utils/network/network_connection.c
+            utils/file_manager/file_manager.c
         PUBLIC
             server/network/connection/network_connection.h
             server/network/authentication/authentication.h
             server/network/manager/network_manager.h
             server/storage/manager/storage_manager.h
+            server/storage/database_wrapper/auth_token/auth_token_database.h
+            server/storage/database_wrapper/user/user_database.h
             server/utils/close_thread.h
             utils/network/network_connection.h
+            utils/file_manager/file_manager.h
             utils/tables/file.h
             utils/tables/user.h
             utils/tables/auth_token.h
