@@ -33,6 +33,9 @@ target_sources(simple_file_sharing_server
             server/utils/close_thread.c
             utils/network/network_connection.c
             utils/file_manager/file_manager.c
+            utils/tables/user/user.c
+            utils/tables/auth_token/auth_token.c
+            utils/thread_data/thread_data.c
         PUBLIC
             server/network/connection/network_connection.h
             server/network/authentication/authentication.h
@@ -44,8 +47,9 @@ target_sources(simple_file_sharing_server
             utils/network/network_connection.h
             utils/file_manager/file_manager.h
             utils/tables/file.h
-            utils/tables/user.h
-            utils/tables/auth_token.h
+            utils/tables/user/user.h
+            utils/tables/auth_token/auth_token.h
             utils/tables/user_file_share_permissions.h
-            utils/thread_data.h
+            utils/thread_data/thread_data.h
         )
+# project requires uuid/uuid.h (libuuid)
