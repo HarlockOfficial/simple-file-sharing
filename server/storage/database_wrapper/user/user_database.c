@@ -13,7 +13,7 @@ long long find_by_id(user *data);
 
 long long find_by_username(user *data);
 
-long long create_entry(user *data){
+long long create_entry_user(user *data){
     pthread_mutex_lock(&lock2);
     pthread_mutex_lock(&lock);
     if(strcmp(data->username, "") == 0 || strcmp(data->password, "") == 0){
@@ -22,6 +22,7 @@ long long create_entry(user *data){
     long long position = file_size(FILENAME);
     long long entry_count = elements_count(FILENAME, sizeof(user));
     user account;
+    create_user(0, "", "", -1, &account);
     for(long long i = 0; i < entry_count; ++i){
         int result = file_read(FILENAME, sizeof(user), i*(long long)sizeof(user), &account);
         if(result!=0){
@@ -39,7 +40,7 @@ long long create_entry(user *data){
     return position;
 }
 
-long long search_entry(user *data){
+long long search_entry_user(user *data){
     pthread_mutex_lock(&lock);
     if(data->user_id>0){
         return find_by_id(data);
@@ -50,22 +51,16 @@ long long search_entry(user *data){
     return -1;
 }
 
-long long update_entry(user *data){
+long long update_entry_user(user *data){
     pthread_mutex_lock(&lock2);
     pthread_mutex_lock(&lock);
     if(data->user_id<=0){
         return -1;
     }
-    user updated_data = {
-            data->user_id,
-            "",
-            "",
-            data->token_id
-    };
-    strcpy(updated_data.username, data->username);
-    strcpy(updated_data.password, data->password);
+    user updated_data;
+    create_user(data->user_id, data->username, data->password, data->token_id, &updated_data);
     pthread_mutex_unlock(&lock);
-    long long index = search_entry(data);
+    long long index = search_entry_user(data);
     pthread_mutex_lock(&lock);
     *data = updated_data;
     long long result = file_write(FILENAME, sizeof(user), index*(long long)sizeof(user), data);
@@ -74,9 +69,9 @@ long long update_entry(user *data){
     return result;
 }
 
-int delete_entry(user *data){
+int delete_entry_user(user *data){
     pthread_mutex_lock(&lock2);
-    long long index = search_entry(data);
+    long long index = search_entry_user(data);
     pthread_mutex_lock(&lock);
     if(index<=0){
         return -1;
