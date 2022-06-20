@@ -1,14 +1,16 @@
 #include <pthread.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 #include "../connection/network_connection.h"
 #include "../authentication/authentication.h"
 #include "../../storage/manager/storage_manager.h"
 #include "../../../utils/network/network_connection.h"
-#include "../../../utils/thread_data.h"
+#include "../../../utils/thread_data/thread_data.h"
+#include "../../../utils/network_communication_delimiter.h"
 #include "network_manager.h"
 
-void sort_the_requests(const int* serverFd, void* other_data, pthread_t **thread, void * (*thread_function)(void*));
+void create_thread(const int* clientFd, const int* serverFd, void* other_data, pthread_t **thread, void * (*thread_function)(void*));
 int find_first_free_thread_index();
 void thread_exit(pthread_t *threads);
 
@@ -32,30 +34,28 @@ void *network_manager(void *serverFd){
         if(len<=0){
             continue;
         }
-
+        char* original_string = malloc(sizeof(char) * len);
+        strcpy(original_string, data);
         //message received in the format: <action>;<other_data>
-        char* action = strtok(data, ";");
+        char* action = strtok(data, DELIMITER);
         if(strcmp(action, "login") == 0) {
-            sort_the_requests((int*)serverFd, data, &threads_pointer, login);
+            create_thread(&clientFd, (int*)serverFd, original_string, &threads_pointer, login);
         }else if(strcmp(action, "register") == 0) {
-            sort_the_requests((int*)serverFd, data, &threads_pointer, sing_in);
+            create_thread(&clientFd, (int *) serverFd, original_string, &threads_pointer, sign_in);
         }else if(strcmp(action, "logout") == 0) {
-            sort_the_requests((int*)serverFd, data, &threads_pointer, logout);
+            create_thread(&clientFd, (int*)serverFd, original_string, &threads_pointer, logout);
         }else if(strcmp(action, "manage") == 0) {
-            sort_the_requests((int*)serverFd, data, &threads_pointer, storage_manager);
+            create_thread(&clientFd, (int*)serverFd, original_string, &threads_pointer, storage_manager);
         }
     }
     thread_exit(threads_pointer);
     return NULL;
 }
 
-void sort_the_requests(const int* serverFd, void* other_data, pthread_t **thread, void * (*thread_function)(void*)){
+void create_thread(const int* clientFd, const int* serverFd, void* other_data, pthread_t **thread, void * (*thread_function)(void*)){
     int index = find_first_free_thread_index();
-    struct main_data register_data = {
-            (int*) serverFd,
-            index,
-            other_data
-    };
+    struct main_data register_data;
+    create_main_data((int*) clientFd, (int*) serverFd, index, other_data, &register_data);
     is_thread_running[index] = 1;
     pthread_create(thread[index], NULL, thread_function, &register_data);
 }
@@ -72,6 +72,7 @@ int find_first_free_thread_index() {
 
 
 void thread_exit(pthread_t *threads) {
+    printf("Waiting for all threads to close\n");
     for(int i = 0; i<THREAD_COUNT; ++i){
         pthread_join(threads[i], NULL);
     }
