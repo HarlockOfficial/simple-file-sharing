@@ -15,8 +15,8 @@ target_sources(simple_file_sharing_client
             client/network/auth/auth.h
             utils/network/network_connection.h
             utils/tables/file.h
-            utils/tables/user.h
-            utils/tables/auth_token.h
+            utils/tables/user/user.h
+            utils/tables/auth_token/auth_token.h
             utils/tables/user_file_share_permissions.h
         )
 
