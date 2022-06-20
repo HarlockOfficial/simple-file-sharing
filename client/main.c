@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#include "../utils/tables/auth_token.h"
+#include "../utils/tables/auth_token/auth_token.h"
 #include "network/auth/auth.h"
 
 void login(auth_token *token, int serverFd);
